@@ -8,11 +8,12 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(),
       body: Body(),
-      backgroundColor: kPrimaryColor,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green[500],
         child: Icon(Icons.add, size: 35),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/addPlant');
+        },
       ),
     );
   }

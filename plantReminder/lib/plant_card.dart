@@ -3,6 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plantReminder/constants.dart';
 
 class PlantCard extends StatelessWidget {
+  String name = " ";
+  String specie = " ";
+  String day = "";
+  String image = "";
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -11,7 +16,7 @@ class PlantCard extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: new LinearGradient(
-            colors: [kSecudaryColor, Colors.green[300]],
+            colors: [kSecondaryColor, Colors.green[300]],
             begin: const FractionalOffset(0.0, 0.0),
             end: const FractionalOffset(1.0, 0.0),
             stops: [0.0, 1.0],
@@ -33,11 +38,11 @@ class PlantCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildText("Nombre: "),
+                  buildText("Nombre: $name"),
                   SizedBox(height: kPadding),
-                  buildText("Especie: "),
+                  buildText("Especie: $specie"),
                   SizedBox(height: kPadding),
-                  buildText("Dia a regar: "),
+                  buildText("Dia a regar: $day"),
                 ],
               ),
               Spacer(),

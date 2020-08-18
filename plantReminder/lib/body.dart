@@ -10,15 +10,26 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
+    var size = MediaQuery.of(context).size;
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: size.height * 0.3,
+          decoration: BoxDecoration(
+            color: kPrimaryColor,
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(50),
+            ),
+          ),
+        ),
+        Column(
           children: [
+            PlantCard(),
+            PlantCard(),
             PlantCard(),
           ],
         ),
-      ),
+      ],
     );
   }
 }

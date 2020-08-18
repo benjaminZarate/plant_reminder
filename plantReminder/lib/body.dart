@@ -16,13 +16,6 @@ class _BodyState extends State<Body> {
         child: Column(
           children: [
             PlantCard(),
-            PlantCard(),
-            PlantCard(),
-            PlantCard(),
-            PlantCard(),
-            PlantCard(),
-            PlantCard(),
-            PlantCard(),
           ],
         ),
       ),

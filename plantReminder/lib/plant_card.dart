@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plantReminder/constants.dart';
 
 class PlantCard extends StatelessWidget {
@@ -27,14 +28,24 @@ class PlantCard extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(kPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              buildText("Nombre: "),
-              SizedBox(height: kPadding),
-              buildText("Especie: "),
-              SizedBox(height: kPadding),
-              buildText("Dia a regar: "),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildText("Nombre: "),
+                  SizedBox(height: kPadding),
+                  buildText("Especie: "),
+                  SizedBox(height: kPadding),
+                  buildText("Dia a regar: "),
+                ],
+              ),
+              Spacer(),
+              SvgPicture.asset(
+                'assets/svg/forest.svg',
+                width: 70,
+                height: 70,
+              ),
             ],
           ),
         ),
@@ -46,9 +57,9 @@ class PlantCard extends StatelessWidget {
     return Text(
       texto,
       style: TextStyle(
+        fontFamily: 'BalooTamma2',
         color: Colors.white,
         fontSize: 20,
-        fontFamily: 'Roboto',
       ),
     );
   }

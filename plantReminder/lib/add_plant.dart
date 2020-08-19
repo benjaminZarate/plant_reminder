@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:plantReminder/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:day_picker/day_picker.dart';
 
 class AddInfoPlant extends StatefulWidget {
   @override
@@ -10,7 +12,7 @@ class AddInfoPlant extends StatefulWidget {
 }
 
 class _AddInfoPlantState extends State<AddInfoPlant> {
-  var date = DateTime.now();
+  var _dateTime = DateTime.now();
   bool iconPressed = false;
   @override
   void initState() {
@@ -29,6 +31,15 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        child: SvgPicture.asset(
+          'assets/svg/save.svg',
+          width: 35,
+          height: 35,
+        ),
+        onPressed: () {},
+      ),
       body: Container(
         padding: EdgeInsets.all(kPadding),
         decoration: BoxDecoration(
@@ -40,75 +51,72 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                 Colors.black.withOpacity(0.2), BlendMode.dstATop),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            buildPadding('Name'),
-            SizedBox(height: 40),
-            buildPadding('Specie'),
-            SizedBox(height: 60),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                dayButton("M"),
-                Spacer(),
-                dayButton("T"),
-                Spacer(),
-                dayButton("W"),
-                Spacer(),
-                dayButton("T"),
-                Spacer(),
-                dayButton("F"),
-                Spacer(),
-                dayButton("S"),
-                Spacer(),
-                dayButton("S"),
-              ],
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(top: kPadding, left: kPadding),
-              child: Text(
-                "Select an icon: ",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              buildPadding('Name'),
+              SizedBox(height: 20),
+              buildPadding('Specie'),
+              SizedBox(height: 20),
+              TimePickerSpinner(
+                is24HourMode: false,
+                normalTextStyle: TextStyle(fontSize: 24, color: Colors.white),
+                highlightedTextStyle:
+                    TextStyle(fontSize: 24, color: Colors.yellow),
+                spacing: 35,
+                itemHeight: 50,
+                isForce2Digits: true,
+                onTimeChange: (time) {
+                  setState(() {
+                    _dateTime = time;
+                  });
+                },
+              ),
+              SelectWeekDays(
+                border: false,
+                boxDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  gradient: new LinearGradient(
+                    colors: [kSecondaryColor, Colors.green[300]],
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(1.0, 0.0),
+                    stops: [0.0, 1.0],
+                  ),
+                ),
+                onSelect: (values) {
+                  // <== Callback to handle the selected days
+                  print(values);
+                },
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(top: kPadding, left: kPadding),
+                child: Text(
+                  "Select an icon: ",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            GridView.count(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
-              shrinkWrap: true,
-              crossAxisCount: 4,
-              children: [
-                plantIconButton('cactus.svg'),
-                plantIconButton('barley.svg'),
-                plantIconButton('flower.svg'),
-                plantIconButton('forest.svg'),
-                plantIconButton('green.svg'),
-                plantIconButton('spring.svg')
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide.none,
-                  ),
-                  child: Icon(
-                    Icons.save,
-                    size: 40,
-                  ),
-                  onPressed: () {},
-                  color: Colors.white,
-                ),
-              ],
-            )
-          ],
+              GridView.count(
+                padding: EdgeInsets.symmetric(horizontal: kPadding),
+                shrinkWrap: true,
+                crossAxisCount: 4,
+                children: [
+                  plantIconButton('cactus.svg'),
+                  plantIconButton('barley.svg'),
+                  plantIconButton('flower.svg'),
+                  plantIconButton('forest.svg'),
+                  plantIconButton('green.svg'),
+                  plantIconButton('spring.svg')
+                ],
+              ),
+              SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
@@ -136,28 +144,6 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
         constraints: BoxConstraints(
             minHeight: 35, maxHeight: 40, minWidth: 35, maxWidth: 40),
       ),
-    );
-  }
-
-  RawMaterialButton dayButton(String day) {
-    bool pressed = false;
-    return RawMaterialButton(
-      onPressed: () {
-        pressed = !pressed;
-        print(pressed);
-        print(day);
-      },
-      child: Text(
-        day,
-        style: TextStyle(
-          fontSize: 20,
-        ),
-      ),
-      shape: new CircleBorder(),
-      elevation: 10.0,
-      fillColor: pressed ? kSecondaryColor : Colors.white,
-      constraints: BoxConstraints(
-          minHeight: 40, maxHeight: 45, minWidth: 40, maxWidth: 45),
     );
   }
 

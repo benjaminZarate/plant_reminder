@@ -14,6 +14,26 @@ class AddInfoPlant extends StatefulWidget {
 class _AddInfoPlantState extends State<AddInfoPlant> {
   var _dateTime = DateTime.now();
   bool iconPressed = false;
+  var count = 0;
+
+  String name;
+  String specie;
+  List<String> days = [];
+  String svgAsset;
+  String hour;
+  String minute;
+
+  List<bool> _selections = List.generate(6, (index) => false);
+
+  List<String> plantsIcons = [
+    'cactus.svg',
+    'barley.svg',
+    'flower.svg',
+    'forest.svg',
+    'green.svg',
+    'spring.svg'
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -55,10 +75,6 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              buildPadding('Name'),
-              SizedBox(height: 20),
-              buildPadding('Specie'),
-              SizedBox(height: 20),
               TimePickerSpinner(
                 is24HourMode: false,
                 normalTextStyle: TextStyle(fontSize: 24, color: Colors.white),
@@ -70,6 +86,9 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                 onTimeChange: (time) {
                   setState(() {
                     _dateTime = time;
+                    hour = _dateTime.hour.toString();
+                    minute = _dateTime.minute.toString();
+                    print(hour + ":" + minute);
                   });
                 },
               ),
@@ -86,9 +105,14 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                 ),
                 onSelect: (values) {
                   // <== Callback to handle the selected days
-                  print(values);
+                  days = values;
+                  print(days);
                 },
               ),
+              SizedBox(height: 20),
+              buildPadding('Name', name),
+              SizedBox(height: 20),
+              buildPadding('Specie', specie),
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(top: kPadding, left: kPadding),
@@ -101,18 +125,41 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                   ),
                 ),
               ),
-              GridView.count(
-                padding: EdgeInsets.symmetric(horizontal: kPadding),
-                shrinkWrap: true,
-                crossAxisCount: 4,
-                children: [
-                  plantIconButton('cactus.svg'),
-                  plantIconButton('barley.svg'),
-                  plantIconButton('flower.svg'),
-                  plantIconButton('forest.svg'),
-                  plantIconButton('green.svg'),
-                  plantIconButton('spring.svg')
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 4,
+                  children: [
+                    plantIconButton('cactus.svg'),
+                    plantIconButton('barley.svg'),
+                    plantIconButton('flower.svg'),
+                    plantIconButton('forest.svg'),
+                    plantIconButton('green.svg'),
+                    plantIconButton('spring.svg')
+                  ].asMap().entries.map((widget) {
+                    return ToggleButtons(
+                      renderBorder: false,
+                      fillColor: Colors.lightGreen,
+                      isSelected: [_selections[widget.key]],
+                      onPressed: (_) {
+                        setState(() {
+                          for (int i = 0; i < _selections.length; i++) {
+                            if (_selections[i] != _selections[widget.key]) {
+                              if (_selections[i]) {
+                                _selections[i] = false;
+                              }
+                            }
+                          }
+                          _selections[widget.key] = !_selections[widget.key];
+                          svgAsset = plantsIcons[widget.key];
+                          print(svgAsset);
+                        });
+                      },
+                      children: [widget.value],
+                    );
+                  }).toList(),
+                ),
               ),
               SizedBox(height: 30),
             ],
@@ -123,31 +170,18 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
   }
 
   Padding plantIconButton(String svgAsset) {
-    bool pressed = false;
+    String asset = svgAsset;
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: RawMaterialButton(
-        onPressed: () {
-          setState(() {
-            iconPressed = true;
-            pressed = !pressed;
-          });
-        },
-        child: SvgPicture.asset(
-          'assets/svg/$svgAsset',
-          width: 50,
-          height: 50,
-        ),
-        shape: new CircleBorder(),
-        elevation: 10.0,
-        fillColor: pressed ? kSecondaryColor : Colors.white,
-        constraints: BoxConstraints(
-            minHeight: 35, maxHeight: 40, minWidth: 35, maxWidth: 40),
+      child: SvgPicture.asset(
+        'assets/svg/$asset',
+        width: 50,
+        height: 50,
       ),
     );
   }
 
-  Padding buildPadding(String hint) {
+  Padding buildPadding(String hint, String stringTarget) {
     return Padding(
       padding: const EdgeInsets.all(kPadding),
       child: Container(
@@ -168,6 +202,10 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
           decoration: InputDecoration(
             hintText: hint,
           ),
+          onSubmitted: (value) {
+            stringTarget = value;
+            print(stringTarget);
+          },
         ),
       ),
     );

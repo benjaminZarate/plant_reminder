@@ -11,6 +11,7 @@ class AddInfoPlant extends StatefulWidget {
 
 class _AddInfoPlantState extends State<AddInfoPlant> {
   var date = DateTime.now();
+  bool iconPressed = false;
   @override
   void initState() {
     super.initState();
@@ -39,133 +40,124 @@ class _AddInfoPlantState extends State<AddInfoPlant> {
                 Colors.black.withOpacity(0.2), BlendMode.dstATop),
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              buildPadding('Name'),
-              SizedBox(height: 40),
-              buildPadding('Specie'),
-              SizedBox(height: 60),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    buildClipOval("M"),
-                    Spacer(),
-                    buildClipOval("T"),
-                    Spacer(),
-                    buildClipOval("W"),
-                    Spacer(),
-                    buildClipOval("T"),
-                    Spacer(),
-                    buildClipOval("F"),
-                    Spacer(),
-                    buildClipOval("S"),
-                    Spacer(),
-                    buildClipOval("S"),
-                  ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            buildPadding('Name'),
+            SizedBox(height: 40),
+            buildPadding('Specie'),
+            SizedBox(height: 60),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                dayButton("M"),
+                Spacer(),
+                dayButton("T"),
+                Spacer(),
+                dayButton("W"),
+                Spacer(),
+                dayButton("T"),
+                Spacer(),
+                dayButton("F"),
+                Spacer(),
+                dayButton("S"),
+                Spacer(),
+                dayButton("S"),
+              ],
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.only(top: kPadding, left: kPadding),
+              child: Text(
+                "Select an icon: ",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(kPadding),
-                child: Text(
-                  "Select an icon: ",
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.white,
+            ),
+            GridView.count(
+              padding: EdgeInsets.symmetric(horizontal: kPadding),
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              children: [
+                plantIconButton('cactus.svg'),
+                plantIconButton('barley.svg'),
+                plantIconButton('flower.svg'),
+                plantIconButton('forest.svg'),
+                plantIconButton('green.svg'),
+                plantIconButton('spring.svg')
+              ],
+            ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FlatButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide.none,
                   ),
+                  child: Icon(
+                    Icons.save,
+                    size: 40,
+                  ),
+                  onPressed: () {},
+                  color: Colors.white,
                 ),
-              ),
-              GridView.count(
-                padding: EdgeInsets.all(kPadding),
-                shrinkWrap: true,
-                crossAxisCount: 3,
-                children: [
-                  buildGestureDetector("barley.svg"),
-                  buildGestureDetector("cactus.svg"),
-                  buildGestureDetector("flower.svg"),
-                  buildGestureDetector("forest.svg"),
-                  buildGestureDetector("green.svg"),
-                  buildGestureDetector("green.svg"),
-                  buildGestureDetector("green.svg"),
-                  buildGestureDetector("green.svg"),
-                ],
-              ),
-            ],
-          ),
+              ],
+            )
+          ],
         ),
       ),
     );
   }
 
-  Padding buildGestureDetector(String svgAsset) {
+  Padding plantIconButton(String svgAsset) {
     bool pressed = false;
     return Padding(
-      padding: const EdgeInsets.all(kPadding),
-      child: GestureDetector(
-        onTap: () {
+      padding: const EdgeInsets.all(8.0),
+      child: RawMaterialButton(
+        onPressed: () {
           setState(() {
+            iconPressed = true;
             pressed = !pressed;
           });
         },
-        child: ClipOval(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                'assets/svg/$svgAsset',
-                width: 50,
-                height: 50,
-              ),
-            ),
-          ),
+        child: SvgPicture.asset(
+          'assets/svg/$svgAsset',
+          width: 50,
+          height: 50,
         ),
+        shape: new CircleBorder(),
+        elevation: 10.0,
+        fillColor: pressed ? kSecondaryColor : Colors.white,
+        constraints: BoxConstraints(
+            minHeight: 35, maxHeight: 40, minWidth: 35, maxWidth: 40),
       ),
     );
   }
 
-  GestureDetector buildClipOval(String day) {
+  RawMaterialButton dayButton(String day) {
     bool pressed = false;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          pressed = !pressed;
-        });
+    return RawMaterialButton(
+      onPressed: () {
+        pressed = !pressed;
+        print(pressed);
+        print(day);
       },
-      child: ClipOval(
-        child: Container(
-          decoration: BoxDecoration(
-            color: pressed ? kButtonColor : Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 7,
-                spreadRadius: 10,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          height: 40, // height of the button
-          width: 40, // width of the button
-          child: Center(
-            child: Text(
-              day,
-              style: TextStyle(
-                color: pressed ? Colors.white : kButtonColor,
-                fontSize: 25,
-              ),
-            ),
-          ),
+      child: Text(
+        day,
+        style: TextStyle(
+          fontSize: 20,
         ),
       ),
+      shape: new CircleBorder(),
+      elevation: 10.0,
+      fillColor: pressed ? kSecondaryColor : Colors.white,
+      constraints: BoxConstraints(
+          minHeight: 40, maxHeight: 45, minWidth: 40, maxWidth: 45),
     );
   }
 

@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:plantReminder/Modelo/plant_info.dart';
 import 'package:plantReminder/constants.dart';
 
 // ignore: must_be_immutable
 class PlantCard extends StatelessWidget {
-  String name = " ";
-  String specie = " ";
-  String day = "";
-  String image = "";
+  Plant plant;
+  PlantCard(this.plant);
+
+  String name;
+  String specie;
+  String day;
+  int hour;
+  int minute;
+  String image;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(kPadding),
+      padding: const EdgeInsets.all(10.0),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -39,16 +45,21 @@ class PlantCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildText("Nombre: $name"),
+                  buildText(" Name: " + plant.name),
                   SizedBox(height: kPadding),
-                  buildText("Especie: $specie"),
+                  buildText(" Specie: " + plant.specie),
                   SizedBox(height: kPadding),
-                  buildText("Dia a regar: $day"),
+                  buildText(plant.day.toString()),
+                  SizedBox(height: kPadding),
+                  buildText(" " +
+                      plant.hour.toString() +
+                      ":" +
+                      plant.minute.toString()),
                 ],
               ),
               Spacer(),
               SvgPicture.asset(
-                'assets/svg/forest.svg',
+                'assets/svg/' + plant.image,
                 width: 70,
                 height: 70,
               ),
